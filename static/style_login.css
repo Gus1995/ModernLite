@@ -1,0 +1,61 @@
+
+body {
+    background-color: rgb(0, 0, 0);
+    color: white; 
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 35px;
+    margin: 0;
+}
+
+
+
+.main-logo {
+    height: 150px;
+    width: 500px;
+    margin-right: 50px;
+}
+
+input[type="text"], 
+input[type="password"] {
+    width: 40%;
+    padding: 7px;
+    margin: 4px;
+    margin-left: 90px;
+}
+
+button {
+    width: 80px;
+    margin: 5px;
+    padding: 2px;
+    cursor: pointer;
+    margin-left: 170px;
+    }
+
+
+    /*Kavu Art*/
+
+.image-container {
+    position: relative;
+    display: inline-block;
+    }
+    
+.fade-image {
+    display: block;
+    max-width: 99%; /* Ensure the image resizes responsively */
+    height: auto;
+}
+
+.image-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 200px; /* Adjust the width to control the length of the fade */
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 15%,rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 1) 100%);
+    
+    pointer-events: none; /* Ensure the pseudo-element doesn't interfere with clicks */
+}
