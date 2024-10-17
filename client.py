@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, login_required, logout_user, current_user
 from flask_wtf import FlaskForm
@@ -6,13 +6,11 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
 
-# Initialize extensions
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 
 def create_app():
-    # Initialize Flask app and extensions
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
     app.config['SECRET_KEY'] = 'thisisasecretkey'
@@ -34,6 +32,7 @@ def create_app():
     
     # Define the RegisterForm
     class RegisterForm(FlaskForm):
+        
         username = StringField(validators=[InputRequired(), Length(min=4, max=20)], render_kw={"placeholder": "Username"})
         password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)], render_kw={"placeholder": "Password"})
         submit = SubmitField('Register')
@@ -62,8 +61,9 @@ def create_app():
 
 
 
-    @app.route('/login')
+    @app.route('/login', methods=['GET', 'POST'])
     def login():
+        
         form = LoginForm()
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data).first()
@@ -72,7 +72,7 @@ def create_app():
                 return redirect(url_for('home', username=form.username.data))
         return render_template('login_screen.html', form=form)
 
-    @app.route('/home/<username>')
+    @app.route('/home')
     def home():
         return render_template('home_screen.html', username=current_user.username)
     
@@ -86,6 +86,11 @@ def create_app():
             db.session.commit()
             return redirect(url_for('login', username=form.username.data))
         return render_template('register_screen.html', form=form)
+    
+    @app.route("/logout")
+    def logout():
+        session.clear()
+        return redirect("/login")
     
     return app
 
